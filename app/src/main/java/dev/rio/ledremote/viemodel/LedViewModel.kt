@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import dev.rio.ledremote.datasource.LedDatasource
 import dev.rio.ledremote.model.Led
+import dev.rio.ledremote.tool.ButtonOption
 import java.util.*
 
 class LedViewModel(var ledDatasource: LedDatasource) : ViewModel() {
@@ -17,12 +18,12 @@ class LedViewModel(var ledDatasource: LedDatasource) : ViewModel() {
         }
     }
 
-    fun editLed(id:Long, led: Led ) : LiveData<MutableList<Led>> {
+    fun editLed(id:Long, led: Led , buttonOption : ButtonOption) : LiveData<MutableList<Led>> {
         return liveData {
-            if (led.status == "ON"){
-                led.status = "OFF"
-            }else{
+            if (buttonOption == ButtonOption.ON){
                 led.status = "ON"
+            }else if(buttonOption == ButtonOption.OFF){
+                led.status = "OFF"
             }
             ledDatasource.editLed(id,led)
             val leds = ledDatasource.getLed()

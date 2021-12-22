@@ -10,6 +10,7 @@ import dev.rio.ledremote.api.ApiService
 import dev.rio.ledremote.databinding.ActivityMainBinding
 import dev.rio.ledremote.datasource.LedDatasource
 import dev.rio.ledremote.model.Led
+import dev.rio.ledremote.tool.ButtonOption
 import dev.rio.ledremote.viemodel.LedViewModel
 import java.util.*
 
@@ -62,8 +63,13 @@ class MainActivity : AppCompatActivity() {
         binding.ledRecycler.adapter = ledAdapter
 
 
-        ledAdapter.onClickListener = { id: Long, led: Led ->
-            ledViewModel.editLed(id,led).observe(this, androidx.lifecycle.Observer {
+        ledAdapter.onClickListener = { id: Long, led: Led, buttonOption: ButtonOption ->
+            if(buttonOption == ButtonOption.ON){
+                binding.ledStatus.text = "ON"
+            }else{
+                binding.ledStatus.text = "OFF"
+            }
+            ledViewModel.editLed(id,led, buttonOption).observe(this, androidx.lifecycle.Observer {
                 if(led.status == "ON"){
                     Toast.makeText(this,"Berhasil Mematikan Lampu",Toast.LENGTH_SHORT).show()
                 }else{
